@@ -16,6 +16,23 @@ interface StressMapProps {
     vehicleId: string;
 }
 
+// Helper function to generate smooth intermediate points between route nodes
+function getInterpolatedPoints(path: [number, number][], stepsPerSegment: number = 10): [number, number][] {
+    const interpolated: [number, number][] = [];
+    for (let i = 0; i < path.length - 1; i++) {
+        const start = path[i];
+        const end = path[i + 1];
+        for (let j = 0; j < stepsPerSegment; j++) {
+            const fraction = j / stepsPerSegment;
+            const lat = start[0] + (end[0] - start[0]) * fraction;
+            const lng = start[1] + (end[1] - start[1]) * fraction;
+            interpolated.push([lat, lng]);
+        }
+    }
+    interpolated.push(path[path.length - 1]); // Add the final destination point
+    return interpolated;
+}
+
 // A realistic route simulating actual roads in Bangalore (MG Road / Cubbon Park area)
 const BASE_ROUTE: [number, number][] = [
     [12.9738, 77.6119], // Trinity Metro
@@ -32,8 +49,10 @@ const BASE_ROUTE: [number, number][] = [
     [12.9815, 77.6050], // Chalukya Circle
     [12.9790, 77.6075], // Race Course approach
     [12.9765, 77.6095], // St Marks Road
-    // loops back to start roughly
+    [12.9738, 77.6119], // Loops back to Trinity Metro explicitly
 ];
+
+const SMOOTH_ROUTE = getInterpolatedPoints(BASE_ROUTE, 15);
 
 interface PathSegment {
     positions: [number, number][];
@@ -56,10 +75,9 @@ export default function StressMap({ vehicleId }: StressMapProps) {
     useEffect(() => {
         if (!vehicle || tickCount === 0) return;
 
-        // Simulate movement along the route based on tickCount
-        // We'll loop the route
-        const pointIndex = tickCount % BASE_ROUTE.length;
-        const currentLoc = BASE_ROUTE[pointIndex];
+        // Simulate movement along the route based on tickCount using the smoothed interpolated route
+        const pointIndex = tickCount % SMOOTH_ROUTE.length;
+        const currentLoc = SMOOTH_ROUTE[pointIndex];
 
         // Determine stress color
         const score = vehicle.scoring?.overallScore || 100;
@@ -76,7 +94,7 @@ export default function StressMap({ vehicleId }: StressMapProps) {
         setSegments(prev => {
             if (prev.length === 0) {
                 // Start the very first segment with the first two points so Polyline doesn't crash on 1 point
-                return [{ positions: [BASE_ROUTE[0], currentLoc], color }];
+                return [{ positions: [SMOOTH_ROUTE[0], currentLoc], color }];
             }
 
             const lastSegment = prev[prev.length - 1];
@@ -103,7 +121,7 @@ export default function StressMap({ vehicleId }: StressMapProps) {
 
     const currentLoc = segments.length > 0
         ? segments[segments.length - 1].positions[segments[segments.length - 1].positions.length - 1]
-        : BASE_ROUTE[0];
+        : SMOOTH_ROUTE[0];
 
     return (
         <div style={{ height: '400px', width: '100%', minHeight: '400px', position: 'relative', zIndex: 0 }}>
