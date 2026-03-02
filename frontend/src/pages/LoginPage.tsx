@@ -91,89 +91,140 @@ export default function LoginPage({ onLogin }: LoginPageProps) {
     };
 
     return (
-        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '24px', background: '#fff' }}>
-            {/* Logo */}
-            <div style={{ textAlign: 'center', marginBottom: 40 }}>
-                <div style={{ width: 64, height: 64, borderRadius: 16, background: 'linear-gradient(135deg, #3478F6, #60a5fa)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', boxShadow: '0 4px 14px rgba(52,120,246,0.3)' }}>
-                    <Car size={28} color="white" />
+        <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '24px', background: 'linear-gradient(135deg, #1d6dee, #4088f7)' }}>
+
+            {/* Minimalist Logo Area based on Reference */}
+            <div style={{ textAlign: 'center', marginBottom: 40, animation: 'slideUp 0.6s ease-out' }}>
+                <div style={{
+                    width: 72,
+                    height: 72,
+                    borderRadius: 20,
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 16px',
+                    backdropFilter: 'blur(10px)',
+                    border: '1px solid rgba(255,255,255,0.2)'
+                }}>
+                    {/* Using an icon that looks like the reference dashboard/gauge */}
+                    <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" opacity="0.4" />
+                        <circle cx="12" cy="12" r="3" fill="white" />
+                        <path d="M12 15a3 3 0 0 0 3-3" />
+                        <path d="M12 9a3 3 0 0 0-3 3" />
+                    </svg>
                 </div>
-                <h1 style={{ fontSize: 24, fontWeight: 800, color: '#1e293b', marginBottom: 6 }}>Vehicle Health</h1>
-                <p style={{ fontSize: 14, color: '#94a3b8', fontWeight: 500 }}>Monitor your fleet's health in real-time</p>
+                <h1 style={{ fontSize: 32, fontWeight: 800, color: 'white', letterSpacing: '-0.5px', marginBottom: 8 }}>DriveGuard</h1>
+                <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.8)', fontWeight: 600, letterSpacing: '2px', textTransform: 'uppercase' }}>
+                    MONITOR. MAINTAIN. PROTECT.
+                </p>
+                <div style={{ width: 40, height: 2, background: 'rgba(255,255,255,0.5)', margin: '16px auto 0', borderRadius: 2 }}></div>
             </div>
 
-            {/* Mode Toggle */}
-            <div style={{ display: 'flex', background: '#f5f6fa', borderRadius: 12, padding: 4, marginBottom: 24 }}>
-                <button
-                    onClick={() => { setMode('phone'); setOtpSent(false); setError(''); setOtp(['', '', '', '']); }}
-                    style={{
-                        flex: 1, padding: '10px 0', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                        background: mode === 'phone' ? '#fff' : 'transparent',
-                        color: mode === 'phone' ? '#1e293b' : '#94a3b8',
-                        boxShadow: mode === 'phone' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                        transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    }}
-                >
-                    <Phone size={14} /> Phone
-                </button>
-                <button
-                    onClick={() => { setMode('email'); setOtpSent(false); setError(''); setOtp(['', '', '', '']); }}
-                    style={{
-                        flex: 1, padding: '10px 0', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer',
-                        background: mode === 'email' ? '#fff' : 'transparent',
-                        color: mode === 'email' ? '#1e293b' : '#94a3b8',
-                        boxShadow: mode === 'email' ? '0 1px 3px rgba(0,0,0,0.08)' : 'none',
-                        transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    }}
-                >
-                    <Mail size={14} /> Email
-                </button>
-            </div>
-
-            {/* Input */}
-            {!otpSent ? (
-                <div>
-                    {mode === 'phone' ? (
-                        <div style={{ marginBottom: 16 }}>
-                            <label style={{ fontSize: 13, fontWeight: 600, color: '#64748b', marginBottom: 6, display: 'block' }}>Mobile Number</label>
-                            <input className="input-field" type="tel" placeholder="Enter 10-digit mobile number" value={phone}
-                                onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))} maxLength={10} />
-                        </div>
-                    ) : (
-                        <div style={{ marginBottom: 16 }}>
-                            <label style={{ fontSize: 13, fontWeight: 600, color: '#64748b', marginBottom: 6, display: 'block' }}>Email Address</label>
-                            <input className="input-field" type="email" placeholder="Enter your email" value={email}
-                                onChange={(e) => setEmail(e.target.value)} />
-                        </div>
-                    )}
-                    <button className="btn-primary" disabled={!isInputValid || loading} onClick={handleSendOtp}>
-                        {loading ? 'Sending...' : 'Send OTP'}
+            {/* Login Box (Clean Glassmorphism to fit the bg) */}
+            <div style={{
+                width: '100%',
+                maxWidth: 380,
+                background: 'rgba(255,255,255,0.1)',
+                backdropFilter: 'blur(16px)',
+                border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: 24,
+                padding: 32,
+                boxShadow: '0 20px 40px rgba(0,0,0,0.1)'
+            }}>
+                {/* Mode Toggle */}
+                <div style={{ display: 'flex', background: 'rgba(0,0,0,0.15)', borderRadius: 12, padding: 4, marginBottom: 24 }}>
+                    <button
+                        onClick={() => { setMode('phone'); setOtpSent(false); setError(''); setOtp(['', '', '', '']); }}
+                        style={{
+                            flex: 1, padding: '10px 0', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                            background: mode === 'phone' ? 'rgba(255,255,255,0.2)' : 'transparent',
+                            color: 'white',
+                            transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                        }}
+                    >
+                        <Phone size={14} opacity={mode === 'phone' ? 1 : 0.6} />
+                        <span style={{ opacity: mode === 'phone' ? 1 : 0.6 }}>Phone</span>
+                    </button>
+                    <button
+                        onClick={() => { setMode('email'); setOtpSent(false); setError(''); setOtp(['', '', '', '']); }}
+                        style={{
+                            flex: 1, padding: '10px 0', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer',
+                            background: mode === 'email' ? 'rgba(255,255,255,0.2)' : 'transparent',
+                            color: 'white',
+                            transition: 'all 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                        }}
+                    >
+                        <Mail size={14} opacity={mode === 'email' ? 1 : 0.6} />
+                        <span style={{ opacity: mode === 'email' ? 1 : 0.6 }}>Email</span>
                     </button>
                 </div>
-            ) : (
-                <div>
-                    <p style={{ fontSize: 14, color: '#64748b', textAlign: 'center', marginBottom: 20 }}>
-                        Enter the 4-digit code sent to<br />
-                        <strong style={{ color: '#1e293b' }}>{mode === 'phone' ? phone : email}</strong>
-                    </p>
-                    <div className="otp-inputs" style={{ marginBottom: 24 }}>
-                        {otp.map((digit, i) => (
-                            <input key={i} ref={el => { otpRefs.current[i] = el; }} type="text" inputMode="numeric" maxLength={1}
-                                value={digit} onChange={(e) => handleOtpChange(i, e.target.value)} onKeyDown={(e) => handleOtpKeyDown(i, e)} />
-                        ))}
+
+                {/* Input */}
+                {!otpSent ? (
+                    <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                        {mode === 'phone' ? (
+                            <div style={{ marginBottom: 20 }}>
+                                <input
+                                    type="tel"
+                                    placeholder="Enter 10-digit mobile number"
+                                    value={phone}
+                                    style={{ width: '100%', padding: '16px', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: 12, fontSize: 15, fontWeight: 500, outline: 'none', color: '#1e293b' }}
+                                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+                                    maxLength={10}
+                                />
+                            </div>
+                        ) : (
+                            <div style={{ marginBottom: 20 }}>
+                                <input
+                                    type="email"
+                                    placeholder="Enter your email address"
+                                    value={email}
+                                    style={{ width: '100%', padding: '16px', background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: 12, fontSize: 15, fontWeight: 500, outline: 'none', color: '#1e293b' }}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                        )}
+                        <button
+                            disabled={!isInputValid || loading}
+                            onClick={handleSendOtp}
+                            style={{ width: '100%', padding: '16px', background: 'white', color: '#2563eb', border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700, cursor: isInputValid ? 'pointer' : 'not-allowed', opacity: isInputValid ? 1 : 0.6, transition: 'all 0.2s' }}
+                        >
+                            {loading ? 'Processing...' : 'Continue'}
+                        </button>
                     </div>
-                    <button className="btn-primary" disabled={!isOtpComplete || loading} onClick={handleVerify}>
-                        {loading ? 'Verifying...' : 'Verify & Login'}
-                    </button>
-                    <button onClick={() => { setOtpSent(false); setOtp(['', '', '', '']); setError(''); }}
-                        style={{ width: '100%', marginTop: 12, background: 'none', border: 'none', color: '#3478F6', fontSize: 14, fontWeight: 600, cursor: 'pointer', padding: 8 }}>
-                        Change {mode === 'phone' ? 'number' : 'email'}
-                    </button>
-                </div>
-            )}
+                ) : (
+                    <div style={{ animation: 'fadeIn 0.3s ease-out' }}>
+                        <p style={{ fontSize: 14, color: 'rgba(255,255,255,0.9)', textAlign: 'center', marginBottom: 24, lineHeight: 1.5 }}>
+                            We sent a secure code to<br />
+                            <strong style={{ color: 'white' }}>{mode === 'phone' ? phone : email}</strong>
+                        </p>
+                        <div style={{ display: 'flex', gap: 12, justifyContent: 'center', marginBottom: 24 }}>
+                            {otp.map((digit, i) => (
+                                <input key={i} ref={el => { otpRefs.current[i] = el; }} type="text" inputMode="numeric" maxLength={1}
+                                    style={{ width: 56, height: 64, textAlign: 'center', fontSize: 24, fontWeight: 700, background: 'rgba(255,255,255,0.9)', border: 'none', borderRadius: 12, outline: 'none', color: '#1e293b', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                                    value={digit} onChange={(e) => handleOtpChange(i, e.target.value)} onKeyDown={(e) => handleOtpKeyDown(i, e)} />
+                            ))}
+                        </div>
+                        <button
+                            disabled={!isOtpComplete || loading}
+                            onClick={handleVerify}
+                            style={{ width: '100%', padding: '16px', background: 'white', color: '#2563eb', border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700, cursor: isOtpComplete ? 'pointer' : 'not-allowed', opacity: isOtpComplete ? 1 : 0.6, transition: 'all 0.2s', boxShadow: '0 4px 14px rgba(0,0,0,0.1)' }}
+                        >
+                            {loading ? 'Verifying...' : 'Login Securely'}
+                        </button>
+                        <button onClick={() => { setOtpSent(false); setOtp(['', '', '', '']); setError(''); }}
+                            style={{ width: '100%', marginTop: 16, background: 'none', border: 'none', color: 'rgba(255,255,255,0.8)', fontSize: 14, fontWeight: 500, cursor: 'pointer', padding: 8 }}>
+                            Change {mode === 'phone' ? 'number' : 'email'}
+                        </button>
+                    </div>
+                )}
 
-            {error && (
-                <p style={{ color: '#ef4444', fontSize: 13, textAlign: 'center', marginTop: 12, fontWeight: 500 }}>{error}</p>
-            )}
+                {error && (
+                    <p style={{ color: '#fca5a5', fontSize: 13, textAlign: 'center', marginTop: 16, fontWeight: 500 }}>{error}</p>
+                )}
+            </div>
         </div>
     );
 }
